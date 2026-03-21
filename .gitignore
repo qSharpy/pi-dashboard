@@ -1,4 +1,5 @@
 .env
+secrets.env
 *.db
 *.sqlite
 __pycache__/

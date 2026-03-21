@@ -7,7 +7,7 @@ services:
       - ./frontend:/frontend:ro
       - /var/log:/host_logs:ro
       - /sys/class/thermal:/sys/class/thermal:ro
-    env_file: .env
+    env_file: secrets.env
     environment:
       - DB_PATH=/data/dashboard.db
     ports:
@@ -17,7 +17,6 @@ services:
     image: cloudflare/cloudflared:latest
     restart: unless-stopped
     command: tunnel --no-autoupdate run
-    environment:
-      - TUNNEL_TOKEN=${TUNNEL_TOKEN}
+    env_file: secrets.env
     depends_on:
       - dashboard

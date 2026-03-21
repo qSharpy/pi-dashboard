@@ -1,0 +1,141 @@
+:root {
+  --bg: #0f1117;
+  --surface: #1a1d27;
+  --surface2: #22263a;
+  --border: #2d3250;
+  --accent: #6366f1;
+  --accent-dim: #4f52c7;
+  --text: #e2e8f0;
+  --text-dim: #94a3b8;
+  --green: #22c55e;
+  --yellow: #eab308;
+  --red: #ef4444;
+  --font: 'Inter', system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body { background: var(--bg); color: var(--text); font-family: var(--font); }
+
+/* ---- LOGIN ---- */
+.login-body {
+  display: flex; align-items: center; justify-content: center; min-height: 100vh;
+}
+.login-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+  padding: 48px 40px; width: 360px; text-align: center;
+}
+.login-logo { margin-bottom: 16px; }
+.login-card h1 { font-size: 1.6rem; font-weight: 700; letter-spacing: -0.5px; }
+.login-sub { color: var(--text-dim); font-size: 0.85rem; margin: 6px 0 28px; }
+.input-group input {
+  width: 100%; padding: 12px 16px; background: var(--bg); border: 1px solid var(--border);
+  border-radius: 8px; color: var(--text); font-size: 1rem; outline: none;
+  transition: border-color .2s;
+}
+.input-group input:focus { border-color: var(--accent); }
+button[type="submit"], .logout-btn {
+  width: 100%; margin-top: 14px; padding: 12px; background: var(--accent);
+  color: white; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer;
+  transition: background .2s;
+}
+button[type="submit"]:hover, .logout-btn:hover { background: var(--accent-dim); }
+.error-msg { color: var(--red); font-size: 0.85rem; margin-top: 10px; }
+.hidden { display: none !important; }
+
+/* ---- DASHBOARD LAYOUT ---- */
+.dash-body { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 220px; background: var(--surface); border-right: 1px solid var(--border);
+  display: flex; flex-direction: column; position: fixed; height: 100vh;
+}
+.sidebar-logo {
+  display: flex; align-items: center; gap: 10px; padding: 24px 20px 20px;
+  font-size: 1.1rem; font-weight: 700; border-bottom: 1px solid var(--border);
+}
+.nav-links { list-style: none; padding: 12px 0; flex: 1; }
+.nav-links li { margin: 2px 8px; }
+.nav-link {
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+  color: var(--text-dim); text-decoration: none; border-radius: 8px; font-size: 0.9rem;
+  transition: all .15s;
+}
+.nav-link svg { width: 18px; height: 18px; fill: currentColor; flex-shrink: 0; }
+.nav-link:hover { background: var(--surface2); color: var(--text); }
+.nav-link.active { background: var(--accent); color: white; }
+.sidebar-footer { padding: 16px 16px 24px; border-top: 1px solid var(--border); }
+.logout-btn { width: 100%; background: transparent; border: 1px solid var(--border); color: var(--text-dim); padding: 9px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; margin-top: 0; }
+.logout-btn:hover { background: var(--surface2); color: var(--text); }
+
+.main-content { margin-left: 220px; padding: 32px; flex: 1; }
+
+/* ---- PAGES ---- */
+.page { display: none; }
+.page.active { display: block; }
+.page-title {
+  font-size: 1.4rem; font-weight: 700; margin-bottom: 24px;
+  display: flex; align-items: center; gap: 10px;
+}
+.live-badge {
+  font-size: 0.65rem; background: var(--green); color: #000; padding: 3px 7px;
+  border-radius: 99px; font-weight: 700; letter-spacing: 0.5px;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.6} }
+
+/* ---- STAT CARDS ---- */
+.stat-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; margin-bottom: 32px;
+}
+.stat-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  padding: 20px; transition: border-color .2s;
+}
+.stat-card:hover { border-color: var(--accent); }
+.stat-label { font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; }
+.stat-value { font-size: 1.8rem; font-weight: 700; margin-bottom: 8px; }
+.stat-sub { font-size: 0.75rem; color: var(--text-dim); }
+.stat-bar { height: 4px; background: var(--border); border-radius: 4px; margin-top: 8px; }
+.stat-bar-fill { height: 100%; border-radius: 4px; background: var(--accent); transition: width .5s; width: 0%; }
+
+/* ---- TABLES ---- */
+.table-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 28px; }
+table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+th { background: var(--surface2); color: var(--text-dim); padding: 10px 14px; text-align: left; font-weight: 500; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; }
+td { padding: 10px 14px; border-top: 1px solid var(--border); }
+tr:hover td { background: var(--surface2); }
+.section-sub { font-size: 1rem; font-weight: 600; margin-bottom: 12px; color: var(--text-dim); }
+
+/* ---- CHARTS ---- */
+.chart-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  padding: 24px; margin-bottom: 20px;
+}
+.range-btns { display: flex; gap: 8px; margin-bottom: 20px; }
+.range-btn {
+  padding: 6px 16px; border-radius: 8px; border: 1px solid var(--border);
+  background: transparent; color: var(--text-dim); cursor: pointer; font-size: 0.85rem;
+  transition: all .15s;
+}
+.range-btn.active { background: var(--accent); border-color: var(--accent); color: white; }
+.range-btn:hover:not(.active) { background: var(--surface2); color: var(--text); }
+
+/* ---- REPORTS ---- */
+.reports-layout { display: grid; grid-template-columns: 280px 1fr; gap: 20px; }
+.reports-list { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; max-height: 70vh; overflow-y: auto; }
+.report-item {
+  padding: 14px 16px; border-bottom: 1px solid var(--border); cursor: pointer;
+  transition: background .15s;
+}
+.report-item:hover { background: var(--surface2); }
+.report-item.active { background: var(--accent); }
+.report-item .r-title { font-size: 0.9rem; font-weight: 500; }
+.report-item .r-date { font-size: 0.75rem; color: var(--text-dim); margin-top: 3px; }
+.report-item.active .r-date { color: rgba(255,255,255,0.7); }
+.report-body {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+  padding: 24px; max-height: 70vh; overflow-y: auto; white-space: pre-wrap; font-size: 0.9rem;
+  line-height: 1.7; color: var(--text);
+}
+.empty-msg { color: var(--text-dim); font-style: italic; }

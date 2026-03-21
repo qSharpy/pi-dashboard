@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>openclaw — login</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body class="login-body">
+  <div class="login-card">
+    <div class="login-logo">
+      <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+        <circle cx="20" cy="20" r="20" fill="#6366f1"/>
+        <path d="M12 28 L20 12 L28 28 M15 23 H25" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <h1>openclaw</h1>
+    <p class="login-sub">system dashboard</p>
+    <form id="loginForm">
+      <div class="input-group">
+        <input type="password" id="password" placeholder="password" autocomplete="current-password" autofocus>
+      </div>
+      <button type="submit" id="loginBtn">sign in</button>
+      <p id="loginError" class="error-msg hidden">invalid password</p>
+    </form>
+  </div>
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('loginBtn');
+      const err = document.getElementById('loginError');
+      btn.disabled = true;
+      btn.textContent = '...';
+      err.classList.add('hidden');
+      try {
+        const r = await fetch('/auth/login', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({password: document.getElementById('password').value}),
+        });
+        if (r.ok) {
+          window.location.href = '/dashboard';
+        } else {
+          err.classList.remove('hidden');
+          btn.disabled = false;
+          btn.textContent = 'sign in';
+        }
+      } catch {
+        err.classList.remove('hidden');
+        btn.disabled = false;
+        btn.textContent = 'sign in';
+      }
+    });
+  </script>
+</body>
+</html>

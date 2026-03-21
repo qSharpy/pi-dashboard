@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>openclaw — dashboard</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body class="dash-body">
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <svg width="28" height="28" viewBox="0 0 40 40" fill="none">
+        <circle cx="20" cy="20" r="20" fill="#6366f1"/>
+        <path d="M12 28 L20 12 L28 28 M15 23 H25" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+      <span>openclaw</span>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#overview" class="nav-link active" data-page="overview">
+        <svg viewBox="0 0 24 24"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
+        Overview
+      </a></li>
+      <li><a href="#security" class="nav-link" data-page="security">
+        <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+        Security
+      </a></li>
+      <li><a href="#history" class="nav-link" data-page="history">
+        <svg viewBox="0 0 24 24"><path d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.954 8.954 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg>
+        History
+      </a></li>
+      <li><a href="#reports" class="nav-link" data-page="reports">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zm-1 7V3.5L18.5 9H13z"/></svg>
+        Reports
+      </a></li>
+      <li><a href="#events" class="nav-link" data-page="events">
+        <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z"/></svg>
+        Agent Events
+      </a></li>
+    </ul>
+    <div class="sidebar-footer">
+      <button id="logoutBtn" class="logout-btn">sign out</button>
+    </div>
+  </nav>
+
+  <main class="main-content">
+    <!-- OVERVIEW -->
+    <section id="page-overview" class="page active">
+      <h2 class="page-title">Overview <span class="live-badge">LIVE</span></h2>
+      <div class="stat-grid">
+        <div class="stat-card" id="stat-cpu">
+          <div class="stat-label">CPU</div>
+          <div class="stat-value">—</div>
+          <div class="stat-bar"><div class="stat-bar-fill"></div></div>
+        </div>
+        <div class="stat-card" id="stat-ram">
+          <div class="stat-label">RAM</div>
+          <div class="stat-value">—</div>
+          <div class="stat-bar"><div class="stat-bar-fill"></div></div>
+        </div>
+        <div class="stat-card" id="stat-disk">
+          <div class="stat-label">Disk</div>
+          <div class="stat-value">—</div>
+          <div class="stat-bar"><div class="stat-bar-fill"></div></div>
+        </div>
+        <div class="stat-card" id="stat-temp">
+          <div class="stat-label">Temp</div>
+          <div class="stat-value">—</div>
+          <div class="stat-sub"></div>
+        </div>
+        <div class="stat-card" id="stat-uptime">
+          <div class="stat-label">Uptime</div>
+          <div class="stat-value">—</div>
+          <div class="stat-sub"></div>
+        </div>
+        <div class="stat-card" id="stat-load">
+          <div class="stat-label">Load Avg</div>
+          <div class="stat-value">—</div>
+          <div class="stat-sub"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECURITY -->
+    <section id="page-security" class="page">
+      <h2 class="page-title">Security</h2>
+      <div class="stat-grid">
+        <div class="stat-card" id="sec-attempts">
+          <div class="stat-label">Failed SSH (7d)</div>
+          <div class="stat-value">—</div>
+        </div>
+        <div class="stat-card" id="sec-ips">
+          <div class="stat-label">Unique IPs</div>
+          <div class="stat-value">—</div>
+        </div>
+        <div class="stat-card" id="sec-bans">
+          <div class="stat-label">fail2ban Active Bans</div>
+          <div class="stat-value">—</div>
+        </div>
+        <div class="stat-card" id="sec-total-bans">
+          <div class="stat-label">fail2ban Total Banned</div>
+          <div class="stat-value">—</div>
+        </div>
+      </div>
+      <h3 class="section-sub">Top Attacking IPs</h3>
+      <div class="table-wrap">
+        <table id="attackers-table">
+          <thead><tr><th>#</th><th>IP Address</th><th>Attempts</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <h3 class="section-sub">Recent Events</h3>
+      <div class="table-wrap">
+        <table id="events-table">
+          <thead><tr><th>Time</th><th>IP</th><th>Event</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- HISTORY -->
+    <section id="page-history" class="page">
+      <h2 class="page-title">History</h2>
+      <div class="range-btns">
+        <button class="range-btn active" data-hours="24">24h</button>
+        <button class="range-btn" data-hours="72">3d</button>
+        <button class="range-btn" data-hours="168">7d</button>
+        <button class="range-btn" data-hours="720">30d</button>
+      </div>
+      <div class="chart-card"><canvas id="chart-cpu"></canvas></div>
+      <div class="chart-card"><canvas id="chart-ram"></canvas></div>
+      <div class="chart-card"><canvas id="chart-temp"></canvas></div>
+    </section>
+
+    <!-- REPORTS -->
+    <section id="page-reports" class="page">
+      <h2 class="page-title">Weekly Reports</h2>
+      <div class="reports-layout">
+        <div class="reports-list" id="reports-list"></div>
+        <div class="report-body" id="report-body"><p class="empty-msg">Select a report</p></div>
+      </div>
+    </section>
+
+    <!-- EVENTS -->
+    <section id="page-events" class="page">
+      <h2 class="page-title">Agent Events</h2>
+      <div class="table-wrap">
+        <table id="agent-events-table">
+          <thead><tr><th>Time</th><th>Action</th><th>Details</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="/assets/js/app.js"></script>
+</body>
+</html>

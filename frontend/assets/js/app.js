@@ -182,7 +182,7 @@ async function loadReports() {
       item.classList.add('active');
       const resp = await fetch(`/api/reports/${item.dataset.id}`);
       const rep = await resp.json();
-      document.getElementById('report-body').textContent = rep.content;
+      document.getElementById('report-body').innerHTML = marked.parse(rep.content);
     });
   });
 }

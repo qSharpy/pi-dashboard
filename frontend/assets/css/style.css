@@ -135,7 +135,20 @@ tr:hover td { background: var(--surface2); }
 .report-item.active .r-date { color: rgba(255,255,255,0.7); }
 .report-body {
   background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
-  padding: 24px; max-height: 70vh; overflow-y: auto; white-space: pre-wrap; font-size: 0.9rem;
+  padding: 24px; max-height: 70vh; overflow-y: auto; font-size: 0.9rem;
   line-height: 1.7; color: var(--text);
 }
+.report-body h1,.report-body h2,.report-body h3 { color: var(--text); margin: 1.2em 0 0.4em; font-weight: 600; }
+.report-body h1 { font-size: 1.3rem; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+.report-body h2 { font-size: 1.1rem; }
+.report-body h3 { font-size: 0.95rem; color: var(--text-dim); }
+.report-body p { margin: 0.5em 0; }
+.report-body ul,.report-body ol { padding-left: 1.4em; margin: 0.5em 0; }
+.report-body li { margin: 0.2em 0; }
+.report-body code { background: var(--surface2); padding: 1px 6px; border-radius: 4px; font-size: 0.85em; font-family: monospace; }
+.report-body pre { background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; padding: 12px; overflow-x: auto; margin: 0.8em 0; }
+.report-body pre code { background: none; padding: 0; }
+.report-body strong { color: var(--text); }
+.report-body blockquote { border-left: 3px solid var(--accent); padding-left: 12px; color: var(--text-dim); margin: 0.8em 0; }
+.report-body hr { border: none; border-top: 1px solid var(--border); margin: 1em 0; }
 .empty-msg { color: var(--text-dim); font-style: italic; }

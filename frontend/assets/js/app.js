@@ -94,7 +94,7 @@ function startLiveMetrics() {
 function extractActionItems(content) {
   return content.split('\n')
     .filter(l => l.includes('[ACTION NEEDED]'))
-    .map(l => l.replace(/^[-*>\s]*/, '').trim());
+    .map(l => l.replace(/^[-*>\s]*/, '').replace(/\*{1,2}\[ACTION NEEDED\]\*{1,2}\s*/g, '').trim());
 }
 
 async function loadOverviewExtras() {

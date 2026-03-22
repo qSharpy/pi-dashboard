@@ -92,9 +92,29 @@ function startLiveMetrics() {
 
 // ---- OVERVIEW EXTRAS ----
 function extractActionItems(content) {
-  return content.split('\n')
-    .filter(l => l.includes('[ACTION NEEDED]'))
-    .map(l => l.replace(/^[-*>\s]*/, '').replace(/\*{1,2}\[ACTION NEEDED\]\*{1,2}\s*/g, '').trim());
+  const open = [], resolved = [];
+  content.split('\n').forEach(l => {
+    if (l.includes('[ACTION NEEDED]')) {
+      open.push(l.replace(/^[-*>\s]*/, '').replace(/\*{1,2}\[ACTION NEEDED\]\*{1,2}\s*/g, '').trim());
+    } else if (l.includes('[RESOLVED')) {
+      resolved.push(l.replace(/^[-*>\s]*/, '').replace(/\*{1,2}\[RESOLVED[^\]]*\]\*{1,2}\s*/g, '').trim());
+    }
+  });
+  return { open, resolved };
+}
+
+function renderActionItems(container, { open, resolved }) {
+  let html = '';
+  html += open.map(i => `<div class="action-item">${marked.parseInline(i)}</div>`).join('');
+  if (resolved.length) {
+    html += `<div class="action-resolved-toggle" onclick="this.nextElementSibling.classList.toggle('hidden')">
+      ✓ ${resolved.length} resolved — <span>show/hide</span>
+    </div>
+    <div class="action-resolved-list hidden">` +
+      resolved.map(i => `<div class="action-item action-item-resolved">✓ ${marked.parseInline(i)}</div>`).join('') +
+    `</div>`;
+  }
+  container.innerHTML = html || '<p class="empty-msg">No open action items</p>';
 }
 
 async function loadOverviewExtras() {
@@ -106,10 +126,7 @@ async function loadOverviewExtras() {
     if (reports.length) {
       const latest = await fetch(`/api/reports/${reports[0].id}`);
       const rep = await latest.json();
-      const items = extractActionItems(rep.content);
-      actionsEl.innerHTML = items.length
-        ? items.map(i => `<div class="action-item">${marked.parseInline(i.replace('[ACTION NEEDED]', '').trim())}</div>`).join('')
-        : '<p class="empty-msg">No open action items</p>';
+      renderActionItems(actionsEl, extractActionItems(rep.content));
     }
   }
 
@@ -221,8 +238,8 @@ async function loadReports() {
       const items = extractActionItems(rep.content);
       const actionsEl = document.getElementById('report-actions');
       const listEl = document.getElementById('report-actions-list');
-      if (items.length) {
-        listEl.innerHTML = items.map(i => `<div class="action-item">${marked.parseInline(i.replace('[ACTION NEEDED]', '').trim())}</div>`).join('');
+      if (items.open.length || items.resolved.length) {
+        renderActionItems(listEl, items);
         actionsEl.classList.remove('hidden');
       } else {
         actionsEl.classList.add('hidden');

@@ -7,39 +7,37 @@ from app.database import get_db
 
 router = APIRouter(prefix="/api/security", dependencies=[Depends(require_auth)])
 
-SSH_LOG = "/host_logs/auth.log"
 IP_RE = re.compile(r"(\d{1,3}(?:\.\d{1,3}){3})")
-DATE_RE = re.compile(r"^(\w{3}\s+\d+\s+[\d:]+)")
 
 
 def parse_auth_log(days: int = 7):
+    """Read SSH failures from journald (Debian 13 uses journald, no auth.log)."""
     failed = []
     cutoff = datetime.now() - timedelta(days=days)
-    current_year = datetime.now().year
+    since = cutoff.strftime("%Y-%m-%d %H:%M:%S")
 
     try:
-        with open(SSH_LOG) as f:
-            for line in f:
-                if "Failed password" not in line and "Invalid user" not in line:
-                    continue
-                date_m = DATE_RE.match(line)
-                if not date_m:
-                    continue
-                try:
-                    dt = datetime.strptime(
-                        f"{current_year} {date_m.group(1)}", "%Y %b %d %H:%M:%S"
-                    )
-                except ValueError:
-                    continue
-                if dt < cutoff:
-                    continue
-                ip_m = IP_RE.search(line)
-                failed.append({
-                    "timestamp": dt.isoformat(),
-                    "ip": ip_m.group(1) if ip_m else "unknown",
-                    "line": line.strip(),
-                })
-    except FileNotFoundError:
+        result = subprocess.run(
+            ["journalctl", "_SYSTEMD_UNIT=sshd.service", "--since", since,
+             "--no-pager", "-o", "short-iso"],
+            capture_output=True, text=True, timeout=10
+        )
+        for line in result.stdout.splitlines():
+            if "Failed password" not in line and "Invalid user" not in line:
+                continue
+            # ISO timestamp: 2026-03-22T10:00:00+0200
+            ts_m = re.match(r"^(\d{4}-\d{2}-\d{2}T[\d:]+)", line)
+            try:
+                dt = datetime.fromisoformat(ts_m.group(1)) if ts_m else datetime.now()
+            except ValueError:
+                dt = datetime.now()
+            ip_m = IP_RE.search(line)
+            failed.append({
+                "timestamp": dt.isoformat(),
+                "ip": ip_m.group(1) if ip_m else "unknown",
+                "line": line.strip(),
+            })
+    except Exception:
         pass
 
     return failed

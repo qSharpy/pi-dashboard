@@ -15,7 +15,7 @@ const pages = document.querySelectorAll('.page');
 function showPage(name) {
   links.forEach(l => l.classList.toggle('active', l.dataset.page === name));
   pages.forEach(p => p.classList.toggle('active', p.id === `page-${name}`));
-  if (name === 'overview') startLiveMetrics();
+  if (name === 'overview') { startLiveMetrics(); loadOverviewExtras(); }
   if (name === 'security') loadSecurity();
   if (name === 'history') loadHistory(24);
   if (name === 'reports') loadReports();
@@ -88,6 +88,40 @@ function startLiveMetrics() {
   fetchLive();
   if (liveInterval) clearInterval(liveInterval);
   liveInterval = setInterval(fetchLive, 5000);
+}
+
+// ---- OVERVIEW EXTRAS ----
+function extractActionItems(content) {
+  return content.split('\n')
+    .filter(l => l.includes('[ACTION NEEDED]'))
+    .map(l => l.replace(/^[-*>\s]*/, '').trim());
+}
+
+async function loadOverviewExtras() {
+  // Action items from latest report
+  const rr = await fetch('/api/reports/');
+  if (rr.ok) {
+    const reports = await rr.json();
+    const actionsEl = document.getElementById('overview-actions');
+    if (reports.length) {
+      const latest = await fetch(`/api/reports/${reports[0].id}`);
+      const rep = await latest.json();
+      const items = extractActionItems(rep.content);
+      actionsEl.innerHTML = items.length
+        ? items.map(i => `<div class="action-item">${i.replace('[ACTION NEEDED]', '').trim()}</div>`).join('')
+        : '<p class="empty-msg">No open action items</p>';
+    }
+  }
+
+  // Agent events
+  const er = await fetch('/api/events/');
+  if (er.ok) {
+    const events = await er.json();
+    const tbody = document.querySelector('#overview-events-table tbody');
+    tbody.innerHTML = events.slice(0, 20).map(e =>
+      `<tr><td>${new Date(e.timestamp).toLocaleString()}</td><td><strong>${e.action}</strong></td><td>${e.details || ''}</td></tr>`
+    ).join('') || '<tr><td colspan="3" style="color:var(--text-dim)">No events yet</td></tr>';
+  }
 }
 
 // ---- SECURITY ----
@@ -183,6 +217,16 @@ async function loadReports() {
       const resp = await fetch(`/api/reports/${item.dataset.id}`);
       const rep = await resp.json();
       document.getElementById('report-body').innerHTML = marked.parse(rep.content);
+      // Show action items panel
+      const items = extractActionItems(rep.content);
+      const actionsEl = document.getElementById('report-actions');
+      const listEl = document.getElementById('report-actions-list');
+      if (items.length) {
+        listEl.innerHTML = items.map(i => `<div class="action-item">${i.replace('[ACTION NEEDED]', '').trim()}</div>`).join('');
+        actionsEl.classList.remove('hidden');
+      } else {
+        actionsEl.classList.add('hidden');
+      }
     });
   });
 }

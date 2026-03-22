@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>openclaw — dashboard</title>
-  <link rel="stylesheet" href="/assets/css/style.css?v=3">
+  <link rel="stylesheet" href="/assets/css/style.css?v=4">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <script src="/assets/js/marked.min.js"></script>
 </head>
@@ -80,6 +80,21 @@
           <div class="stat-sub"></div>
         </div>
       </div>
+      <div class="overview-bottom">
+        <div class="overview-section">
+          <h3 class="section-sub">Action Items</h3>
+          <div id="overview-actions"><p class="empty-msg">No open action items</p></div>
+        </div>
+        <div class="overview-section">
+          <h3 class="section-sub">Agent Events</h3>
+          <div class="table-wrap">
+            <table id="overview-events-table">
+              <thead><tr><th>Time</th><th>Action</th><th>Details</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- SECURITY -->
@@ -138,7 +153,13 @@
       <h2 class="page-title">Weekly Reports</h2>
       <div class="reports-layout">
         <div class="reports-list" id="reports-list"></div>
-        <div class="report-body" id="report-body"><p class="empty-msg">Select a report</p></div>
+        <div class="reports-main">
+          <div id="report-actions" class="report-actions hidden">
+            <h3 class="actions-title">⚠ Action Items</h3>
+            <div id="report-actions-list"></div>
+          </div>
+          <div class="report-body" id="report-body"><p class="empty-msg">Select a report</p></div>
+        </div>
       </div>
     </section>
 
@@ -154,6 +175,6 @@
     </section>
   </main>
 
-  <script src="/assets/js/app.js?v=3"></script>
+  <script src="/assets/js/app.js?v=4"></script>
 </body>
 </html>

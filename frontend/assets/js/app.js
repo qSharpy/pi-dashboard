@@ -108,7 +108,7 @@ async function loadOverviewExtras() {
       const rep = await latest.json();
       const items = extractActionItems(rep.content);
       actionsEl.innerHTML = items.length
-        ? items.map(i => `<div class="action-item">${i.replace('[ACTION NEEDED]', '').trim()}</div>`).join('')
+        ? items.map(i => `<div class="action-item">${marked.parseInline(i.replace('[ACTION NEEDED]', '').trim())}</div>`).join('')
         : '<p class="empty-msg">No open action items</p>';
     }
   }
@@ -222,7 +222,7 @@ async function loadReports() {
       const actionsEl = document.getElementById('report-actions');
       const listEl = document.getElementById('report-actions-list');
       if (items.length) {
-        listEl.innerHTML = items.map(i => `<div class="action-item">${i.replace('[ACTION NEEDED]', '').trim()}</div>`).join('');
+        listEl.innerHTML = items.map(i => `<div class="action-item">${marked.parseInline(i.replace('[ACTION NEEDED]', '').trim())}</div>`).join('');
         actionsEl.classList.remove('hidden');
       } else {
         actionsEl.classList.add('hidden');

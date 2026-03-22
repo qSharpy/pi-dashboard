@@ -176,6 +176,7 @@ function mkChart(id, label, color) {
     data: {labels: [], datasets: [{label, data: [], borderColor: color, backgroundColor: color + '20', fill: true, tension: 0.3, pointRadius: 0}]},
     options: {
       responsive: true,
+      maintainAspectRatio: false,
       plugins: {legend: {labels: {color: '#94a3b8'}}},
       scales: {
         x: {ticks: {color: '#94a3b8', maxTicksLimit: 8}, grid: {color: '#2d3250'}},

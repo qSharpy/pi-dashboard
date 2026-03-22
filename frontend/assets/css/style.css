@@ -110,7 +110,8 @@ tr:hover td { background: var(--surface2); }
 /* ---- CHARTS ---- */
 .chart-card {
   background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
-  padding: 24px; margin-bottom: 20px;
+  padding: 16px; margin-bottom: 12px; height: calc((100vh - 180px) / 3);
+  position: relative;
 }
 .range-btns { display: flex; gap: 8px; margin-bottom: 20px; }
 .range-btn {
@@ -140,13 +141,13 @@ tr:hover td { background: var(--surface2); }
 .action-resolved-toggle span { text-decoration: underline; }
 
 /* ---- REPORTS ---- */
-.reports-layout { display: grid; grid-template-columns: 280px 1fr; gap: 20px; }
-.reports-main { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.reports-layout { display: grid; grid-template-columns: 280px 1fr; gap: 20px; height: calc(100vh - 120px); }
+.reports-main { display: flex; flex-direction: column; gap: 12px; min-width: 0; min-height: 0; }
 .report-actions {
   background: var(--surface); border: 1px solid var(--yellow); border-radius: 10px; padding: 16px;
 }
 .actions-title { font-size: 0.9rem; font-weight: 600; color: var(--yellow); margin-bottom: 10px; }
-.reports-list { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; max-height: 70vh; overflow-y: auto; }
+.reports-list { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; overflow-y: auto; height: 100%; }
 .report-item {
   padding: 14px 16px; border-bottom: 1px solid var(--border); cursor: pointer;
   transition: background .15s;
@@ -158,8 +159,8 @@ tr:hover td { background: var(--surface2); }
 .report-item.active .r-date { color: rgba(255,255,255,0.7); }
 .report-body {
   background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
-  padding: 24px; max-height: 70vh; overflow-y: auto; font-size: 0.9rem;
-  line-height: 1.7; color: var(--text);
+  padding: 24px; overflow-y: auto; font-size: 0.9rem;
+  line-height: 1.7; color: var(--text); flex: 1; min-height: 0;
 }
 .report-body h1,.report-body h2,.report-body h3 { color: var(--text); margin: 1.2em 0 0.4em; font-weight: 600; }
 .report-body h1 { font-size: 1.3rem; border-bottom: 1px solid var(--border); padding-bottom: 6px; }
